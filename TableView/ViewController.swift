@@ -1,20 +1,37 @@
 
 
 import UIKit
+import CoreData
+class CustomTableCell: UITableViewCell {
+    @IBOutlet weak var avtImage: UIImageView!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var linkLabel: UILabel!
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
 
+    }
 
+}
 
-    @IBOutlet weak var myTableView: UITableView!
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    // ccore data
     
-    let array = ["cat","cat1","cat2","cat3","cat4"]
+    var  array = User.sampleData
+    var  data = getdata()
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        myTableView.dataSource = self
-        myTableView.delegate = self
+        print(data)
+        tableView.dataSource = self
+        tableView.delegate = self
     }
+    
     // tableview delegate and datasource
     func numberOfSection(in tableView: UITableView) ->Int{
         return 1
@@ -22,12 +39,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView,numberOfRowsInSection section: Int )-> Int {
         return array.count
     }
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-        let cell = tableView.dequeueReusableCell(withIdentifier:"MyCell",for: indexPath)
-        cell.textLabel!.text = array[indexPath.row]
-        return cell
-    }
 
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+        let cell = tableView.dequeueReusableCell(withIdentifier:"MyCell",for: indexPath) as! CustomTableCell
+        let user = array[indexPath.row]
+        cell.nameLabel?.text = user.login
+        cell.linkLabel?.text = user.url
+        cell.avtImage.image  = UIImage(named:  user.avatar_url)
+        return cell 
+    }
   
+
 }
 
